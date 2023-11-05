@@ -1,0 +1,22 @@
+<h1>Confirm Attendance for <%= @event.name %></h1>
+
+<%= form_with(model: [@event, @attendance]) do |form| %>
+  <div class="field">
+    <%= form.label :user_name, "Your Name:" %>
+    <%= form.text_field :user_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email, "Email:" %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :phone_number, "Phone Number:" %>
+    <%= form.telephone_field :phone_number %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Confirm Attendance" %>
+  </div>
+<% end %>

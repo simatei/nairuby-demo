@@ -1,0 +1,15 @@
+<p>
+  <strong>Event:</strong>
+  <%= @event.name %>
+</p>
+
+<h2>Attendees:</h2>
+<ul>
+  <% @event.attendances.each do |attendance| %>
+    <li>
+      <%= attendance.user_name %> - <%= attendance.email %> - <%= attendance.phone_number %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Confirm Attendance', new_event_attendance_path(@event) %>
