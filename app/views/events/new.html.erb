@@ -1,0 +1,61 @@
+<!-- app/views/events/new.html.erb -->
+<div class="container">
+  <%= form_with(model: @event, local: true, html: { class: "event-form" }) do |form| %>
+    <% if @event.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+        <ul>
+          <% @event.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :name %>
+      <%= form.text_field :name, id: :event_name %>
+    </div>
+
+    <div class="field">
+      <%= form.label :date %>
+      <%= form.datetime_local_field :date, id: :event_date %>
+    </div>
+
+    <div class="field">
+      <%= form.label :location %>
+      <%= form.text_field :location, id: :event_location %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .event-form {
+    width: 100%; /* or set a fixed width like 500px */
+    max-width: 500px; /* you can use max-width for a responsive design */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Adds a slight shadow to make the form pop out */
+    background: #ffffff;
+    border-radius: 5px;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  #error_explanation {
+    color: red;
+    margin-bottom: 20px;
+  }
+</style>
