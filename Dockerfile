@@ -12,7 +12,7 @@ RUN gem install bundler:2.2.22
 WORKDIR /myapp
 
 # Copying Nginx configuration
-COPY .nginx.conf /etc/nginx/sites-available/nginx.conf
+COPY nginx.conf /etc/nginx/sites-available/nginx.conf
 RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.conf \
     && rm -f /etc/nginx/sites-enabled/default
 
