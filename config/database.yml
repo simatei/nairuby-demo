@@ -13,4 +13,4 @@ development:
 
 test:
   <<: *default
-  database: postgres
+  database: myapp_test
