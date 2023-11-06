@@ -42,7 +42,7 @@ jobs:
       - name: Set up Database
         env:
           RAILS_ENV: test
-          PGHOST: localhost
+          PGHOST: db
           PGUSER: postgres
           PGPASSWORD: password
         run: |
@@ -51,7 +51,7 @@ jobs:
       - name: Run Tests
         env:
           RAILS_ENV: test
-          PGHOST: localhost
+          PGHOST: db
           PGUSER: postgres
           PGPASSWORD: password
         run: |
