@@ -10,7 +10,9 @@ development:
   <<: *default
   database: postgres
 
-
 test:
   <<: *default
   database: myapp_test
+  host: <%= ENV['PGHOST'] || 'localhost' %>
+  username: <%= ENV['PGUSER'] || 'postgres' %>
+  password: <%= ENV['PGPASSWORD'] || 'password' %>
