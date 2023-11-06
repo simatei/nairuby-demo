@@ -14,8 +14,9 @@ jobs:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_DB: myapp_test
-
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
         options: >-
