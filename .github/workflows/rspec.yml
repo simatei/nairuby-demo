@@ -14,8 +14,8 @@ jobs:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_DB: test_database
-          POSTGRES_USER: username
+          POSTGRES_DB: myapp_test
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
@@ -42,18 +42,20 @@ jobs:
       - name: Set up Database
         env:
           RAILS_ENV: test
-          PGHOST: postgres 
-          PGUSER: username
+          PGHOST: localhost # Using localhost since services are accessible there
+          PGUSER: postgres
           PGPASSWORD: password
         run: |
+          # Assuming you have a config/database.yml file set up for 'test' to match 'myapp_test'
           bin/rails db:create db:schema:load --trace
 
       - name: Run Tests
         env:
           RAILS_ENV: test
-          PGHOST: postgres
-          PGUSER: username
+          PGHOST: localhost
+          PGUSER: postgres
           PGPASSWORD: password
         run: |
+          # db:migrate might not be necessary if db:schema:load is done unless you want to test migrations
           bin/rails db:migrate
           bundle exec rspec
