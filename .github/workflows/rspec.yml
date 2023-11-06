@@ -14,9 +14,8 @@ jobs:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
+          POSTGRES_DB: myapp_test
+
         ports:
           - 5432:5432
         options: >-
@@ -42,11 +41,10 @@ jobs:
       - name: Set up Database
         env:
           RAILS_ENV: test
-          PGHOST: localhost # Using localhost since services are accessible there
+          PGHOST: localhost
           PGUSER: postgres
           PGPASSWORD: password
         run: |
-          # Assuming you have a config/database.yml file set up for 'test' to match 'myapp_test'
           bin/rails db:create db:schema:load --trace
 
       - name: Run Tests
