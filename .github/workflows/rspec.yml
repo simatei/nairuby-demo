@@ -1,0 +1,61 @@
+name: RSpec Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: your_test_database
+          POSTGRES_USER: your_username
+          POSTGRES_PASSWORD: your_password
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0' # or the Ruby version you want
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update -qq
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+
+    - name: Set up Database
+      env:
+        RAILS_ENV: test
+        PGHOST: localhost
+        PGUSER: your_username
+        PGPASSWORD: your_password
+      run: |
+        bin/rails db:create db:schema:load --trace
+
+    - name: Run Tests
+      env:
+        RAILS_ENV: test
+        PGHOST: localhost
+        PGUSER: your_username
+        PGPASSWORD: your_password
+      run: |
+        bin/rails db:migrate
+        bundle exec rspec
+
