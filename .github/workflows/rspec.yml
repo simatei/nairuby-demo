@@ -19,7 +19,6 @@ jobs:
           POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
-        # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -27,35 +26,34 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.2.2'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.2'
 
-    - name: Install Dependencies
-      run: |
-        sudo apt-get update -qq
-        gem install bundler
-        bundle install --jobs 4 --retry 3
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update -qq
+          gem install bundler
+          bundle install --jobs 4 --retry 3
 
-    - name: Set up Database
-      env:
-        RAILS_ENV: test
-        PGHOST: localhost
-        PGUSER: your_username
-        PGPASSWORD: your_password
-      run: |
-        bin/rails db:create db:schema:load --trace
+      - name: Set up Database
+        env:
+          RAILS_ENV: test
+          PGHOST: postgres 
+          PGUSER: username
+          PGPASSWORD: password
+        run: |
+          bin/rails db:create db:schema:load --trace
 
-    - name: Run Tests
-      env:
-        RAILS_ENV: test
-        PGHOST: localhost
-        PGUSER: your_username
-        PGPASSWORD: your_password
-      run: |
-        bin/rails db:migrate
-        bundle exec rspec
-
+      - name: Run Tests
+        env:
+          RAILS_ENV: test
+          PGHOST: postgres
+          PGUSER: username
+          PGPASSWORD: password
+        run: |
+          bin/rails db:migrate
+          bundle exec rspec
