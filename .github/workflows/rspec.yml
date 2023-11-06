@@ -2,7 +2,7 @@ name: RSpec Tests
 
 on:
   push:
-    branches: [ feature/get-ci-tests-up ]
+    branches: [ develop ]
   pull_request:
     branches: [ master ]
 
