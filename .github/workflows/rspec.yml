@@ -14,9 +14,9 @@ jobs:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_DB: your_test_database
-          POSTGRES_USER: your_username
-          POSTGRES_PASSWORD: your_password
+          POSTGRES_DB: test_database
+          POSTGRES_USER: username
+          POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
