@@ -2,7 +2,7 @@ name: RSpec Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ feature/get-ci-tests-up ]
   pull_request:
     branches: [ master ]
 
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      db:
         image: postgres:12
         env:
           POSTGRES_DB: postgres

@@ -10,7 +10,6 @@ development:
   <<: *default
   database: postgres
 
-
 test:
   <<: *default
   database: myapp_test
