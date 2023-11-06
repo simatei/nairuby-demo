@@ -1,0 +1,40 @@
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+README.md
+LICENSE
+.dockerignore
+
+# Ignore bundler config
+/.bundle
+
+# Ignore all log and cache files
+/log/*
+/tmp/*
+
+# Ignore node modules
+/node_modules
+
+# Ignore precompiled assets
+/public/assets
+
+# Ignore master key for decrypting credentials and more
+/config/master.key
+/config/credentials/*.key
+
+# Ignore development and test environments files
+/config/environments/development.rb
+/config/environments/test.rb
+
+# Ignore test spec files
+/spec
+/test
+
+# Ignore system and coverage data
+/coverage
+/public/system
+/public/packs
+/node_modules
+/yarn-error.log
+/.byebug_history
