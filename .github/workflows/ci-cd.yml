@@ -67,5 +67,5 @@ jobs:
           cd nairuby-demo
           git pull origin master
           docker compose down
-          docker compose -f docker-compose.yml up --build -d
+          docker compose -f docker-compose.yml up -d
           ENDSSH
