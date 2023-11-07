@@ -1,5 +1,7 @@
 [![Continuous Integration and Deployment](https://github.com/simatei/nairuby-demo/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/simatei/nairuby-demo/actions/workflows/ci-cd.yml)
 
+[![Nairuby demo prod](https://github.com/simatei/nairuby-demo/actions/workflows/docker-build.yml/badge.svg)](https://github.com/simatei/nairuby-demo/actions/workflows/docker-build.yml)
+
 
 # README
 
