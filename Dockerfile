@@ -6,6 +6,7 @@ RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
 # Install the specific version of Bundler that matches the Gemfile.lock
 RUN gem install bundler:2.2.22
+RUN gem install brakeman
 
 WORKDIR /myapp
 COPY config/webpacker.yml /myapp/config/webpacker.yml
