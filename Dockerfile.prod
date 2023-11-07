@@ -1,0 +1,64 @@
+# Stage 1: Building assets and dependencies
+# Use a full Ruby image to install dependencies and compile assets
+FROM ruby:3.0.2 as Builder
+
+# Install Node.js (for the asset pipeline) and Yarn
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn
+
+# Define work directory
+WORKDIR /myapp
+
+# Install Rails dependencies
+COPY Gemfile* /myapp/
+RUN bundle config set without 'development test' && \
+    bundle install --jobs 4 --retry 3
+
+# Copy the application code
+COPY . /myapp
+
+# Precompile Rails assets
+# SECRET_KEY_BASE is required for Rails to build the assets, it does not need to be the production key.
+RUN SECRET_KEY_BASE=dummy RAILS_ENV=production bundle exec rake assets:precompile
+
+# Stage 2: Build the final production image
+# Use a slim Ruby image for the final production image
+FROM ruby:3.2.2-slim
+
+# Install dependencies for Ruby & Rails (slim variants don't have these)
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Define work directory
+WORKDIR /myapp
+
+# Install runtime dependencies
+COPY Gemfile* /myapp/
+RUN bundle config set without 'development test' && \
+    bundle install --jobs 4 --retry 3
+
+# Copy the app's code from the Builder stage
+COPY --from=Builder /myapp /myapp
+
+# Add user to run the application
+RUN addgroup --gid 1000 appuser && \
+    adduser --uid 1000 --ingroup appuser --home /myapp --shell /bin/sh --disabled-password --gecos "" appuser
+USER appuser
+
+# Define the entry point script
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+
+# Set Rails to run in production
+ENV RAILS_ENV=production \
+    RACK_ENV=production \
+    NODE_ENV=production \
+    RAILS_LOG_TO_STDOUT=true \
+    RAILS_SERVE_STATIC_FILES=true
+
+# Start puma server by default
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
