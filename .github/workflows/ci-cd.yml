@@ -1,0 +1,70 @@
+name: Continuous Integration and Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: RSpec Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: myapp_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update -qq
+          gem install bundler -v 2.2.15
+          bundle install --jobs 4 --retry 3
+      - name: Prepare Database
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/myapp_test
+        run: |
+          bin/rails db:prepare
+      - name: Run Tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/myapp_test
+        run: |
+          bundle exec rspec
+
+  deploy:
+    name: Deploy to Production
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.LINODE_PRIVATE_KEY }}" > linode_key.pem
+          chmod 600 linode_key.pem
+      - name: Deploy to Linode
+        env:
+          LINODE_USER: ${{ secrets.LINODE_USER }}
+          LINODE_IP: ${{ secrets.LINODE_IP }}
+        run: |
+          ssh -i linode_key.pem -o StrictHostKeyChecking=no $LINODE_USER@$LINODE_IP << 'ENDSSH'
+          cd nairuby-demo
+          git pull origin master
+          docker compose -f docker-compose.prod.yml up --build -d
+          ENDSSH
