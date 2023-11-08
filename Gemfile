@@ -30,6 +30,10 @@ gem 'brakeman', require: false
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'ffi', '1.16.3'
 
+gem 'rubocop', require: false
+# For Rails-specific analysis
+gem 'rubocop-rails', require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

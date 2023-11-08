@@ -1,0 +1,16 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/*'
+    - 'config/**/*'
+    - 'node_modules/**/*'
+
+# List your preferred styles here
+Layout/LineLength:
+  Max: 120
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
