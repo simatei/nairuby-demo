@@ -62,6 +62,8 @@ group :test do
   gem 'faker'
   gem 'webpacker', '~> 5.0'
 
+  # Add benchmark gem
+  gem 'benchmark-ips'
 
 end
 
